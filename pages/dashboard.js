@@ -10,9 +10,10 @@ import SiteTable from '@/components/SiteTable';
 
 const Dashboard = () => {
     const { data } = useSWR('/api/sites', fetcher)
-    /* if (!data) return <SiteTableSkeleton /> */
+    if (!data) return <DashboardShell><SiteTableSkeleton /></DashboardShell>
 
-    const componentToRender = data.sites.length > 0 ? <SiteTable sites={data.sites} /> : <EmptyState />
+    console.log(data);
+    const componentToRender = data.sites?.length > 0 ? <SiteTable sites={data.sites} /> : <EmptyState />
 
     return <DashboardShell>{componentToRender}</DashboardShell>;
 };
