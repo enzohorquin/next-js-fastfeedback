@@ -1,21 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import db from '@/lib/firebase-admin';
+import { getAllSites } from '@/lib/db-admin';
 
 export default async (_, res) => {
 
-  try {
-    const snapshot = await db.collection('sites').get();
-    const sites = [];
+  const { sites, error } = await getAllSites();
 
-    snapshot.forEach((doc) => {
-      sites.push({ id: doc.id, ...doc.data() });
-    });
+  if (error) {
+    res.status(500).json({ error });
+  }
 
-    res.status(200).json({ sites });
-  }
-  catch (error) {
-    console.log(error);
-    res.status(401).json({ sites: [] });
-  }
+  res.status(200).json({ sites });
 
 };
